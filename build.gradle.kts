@@ -103,6 +103,7 @@ tasks.rat {
         ".gradletasknamecache", "gradle/wrapper/**", "gradlew*", "build/**", // Gradle
         ".nb-gradle/**", "*.iml", "*.ipr", "*.iws", "*.idea/**", ".editorconfig" // IDEs
     )
+    notCompatibleWithConfigurationCache("https://github.com/eskatos/creadur-rat-gradle/issues/23")
 }
 
 val isCI = providers.environmentVariable("CI").orNull == "true"
