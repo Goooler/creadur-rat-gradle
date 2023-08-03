@@ -81,6 +81,53 @@ class RatPluginTest(testMatrix: TestMatrix) : AbstractPluginTest(testMatrix) {
     }
 
     @Test
+    fun `run with the task that marked notCompatibleWithConfigurationCache`() {
+        val someTask = if (testMatrix.gradleVersion.isGreaterOrEqualThan("7.4")) {
+            """
+            tasks.register("someTask") {
+                doFirst {
+                    project.logger.log(LogLevel.WARN, "This task is not compatible with configuration cache.")
+                }
+                notCompatibleWithConfigurationCache("")
+            }
+            tasks.check {
+                dependsOn("someTask")
+            }
+            """.trimIndent()
+        } else {
+            ""
+        }
+
+        withBuildScript(
+            """
+            plugins {
+                id("base")
+                id("org.nosphere.apache.rat")
+            }
+            repositories {
+                mavenCentral()
+            }
+            $someTask
+            tasks.rat {
+                verbose.set(true)
+                excludes = [
+                    'build.gradle', 'settings.gradle', 'build/**', '.gradle/**', '.gradle-test-kit/**',
+                ]
+                exclude(
+                    'guh/**',
+                    'no-license-file.txt'
+                )
+            }
+            """
+        )
+        withFile("no-license-file.txt", "Nothing here.")
+
+        build("check") {
+            assertRatTask(SUCCESS)
+        }
+    }
+
+    @Test
     fun `fail the build when finding a file with unapproved or unknown license`() {
         withBuildScript(
             """
