@@ -25,7 +25,7 @@ plugins {
     `kotlin-dsl`
     `maven-publish`
     id("com.gradle.plugin-publish") version "1.2.1"
-    id("org.nosphere.apache.rat") version "0.8.0"
+    id("org.nosphere.apache.rat") version "0.8.1"
     id("org.nosphere.honker") version "0.4.0"
 }
 
@@ -103,5 +103,4 @@ tasks.rat {
         ".gradletasknamecache", "gradle/wrapper/**", "gradlew*", "build/**", // Gradle
         ".nb-gradle/**", "*.iml", "*.ipr", "*.iws", "*.idea/**", ".editorconfig" // IDEs
     )
-    notCompatibleWithConfigurationCache("https://github.com/eskatos/creadur-rat-gradle/issues/23")
 }
