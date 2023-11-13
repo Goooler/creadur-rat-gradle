@@ -39,7 +39,7 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
           arguments: build --continue --stacktrace
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         if: github.event_name == 'pull_request' && failure() && github.repository == 'eskatos/creadur-rat-gradle'
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
